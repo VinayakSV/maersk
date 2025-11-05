@@ -1,5 +1,5 @@
 # Specifies the Docker Compose file format version.
-version: '3.8'
+#version: '3.8'
 
 # This is the main section where we define our services (containers).
 services:

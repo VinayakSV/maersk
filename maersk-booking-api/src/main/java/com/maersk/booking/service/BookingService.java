@@ -29,7 +29,7 @@ public class BookingService {
         // For this task, we just call the endpoint.
         return webClient.post()
                 .uri("/checkAvailable")
-                // .bodyValue(request) // This would send the request data
+                 .bodyValue(request) // This would send the request data
                 .retrieve()
                 .bodyToMono(MaerskAvailabilityResponse.class)
                 .map(response -> response.availableSpace() != null && response.availableSpace() > 0)

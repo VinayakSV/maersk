@@ -18,8 +18,8 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # --- Stage 2: Create the final, lightweight runtime image ---
-# We use a slim OpenJDK image which is much smaller than the Maven image.
-FROM openjdk:17-jdk-slim
+# Use a specific, maintained Eclipse Temurin image tag
+FROM eclipse-temurin:17-jdk-jammy
 
 WORKDIR /app
 
