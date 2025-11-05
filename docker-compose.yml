@@ -1,0 +1,58 @@
+# Specifies the Docker Compose file format version.
+version: '3.8'
+
+# This is the main section where we define our services (containers).
+services:
+  # --- MongoDB Database Service ---
+  
+  mongodb:
+    image: mongo:latest # Use the official MongoDB image from Docker Hub.
+    container_name: mongo-maersk
+    ports:
+      # Map port 27017 on your local machine to port 27017 inside the container.
+      # This allows you to connect to the database from your machine if needed.
+      - "27017:27017"
+    volumes:
+      # This creates a persistent volume named 'mongo-data'.
+      # It ensures that your database data is saved even if you stop or remove the container.
+      - mongo-data:/data/db
+    networks:
+      # Connect this service to our custom network.
+      - maersk-net
+
+  # --- Spring Boot Backend API Service ---
+  maersk-api:
+    build:
+      # Tell Docker Compose to build the image from the Dockerfile in this directory.
+      context: ./maersk-booking-api
+    container_name: maersk-api
+    ports:
+      - "9090:9090" # Map local port 9090 to the container's port 9090.
+    depends_on:
+      - mongodb # This ensures that the 'mongodb' service starts before this service.
+    networks:
+      - maersk-net
+    environment:
+      # Override the MongoDB URI from application.yml to connect to the 'mongodb' container.
+      # 'mongodb' is the hostname of the database service on the Docker network.
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/maersk_bookings
+
+  # --- React Frontend UI Service ---
+  maersk-ui:
+    build: ./maersk-booking-ui
+    container_name: maersk-ui
+    ports:
+      - "3000:80" # Map local port 3000 to the Nginx container's port 80.
+    depends_on:
+      - maersk-api # Ensures the backend is ready before the UI starts.
+    networks:
+      - maersk-net
+
+# Define the custom network that allows our containers to communicate with each other by name.
+networks:
+  maersk-net:
+    driver: bridge
+
+# Define the persistent volume for our database.
+volumes:
+  mongo-data:

@@ -1,0 +1,16 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: maersk-booking-api
+  data:
+    mongodb:
+      # Using a domain-related keyspace (database name)
+      database: maersk_bookings
+      uri: mongodb://localhost:27017/maersk_bookings
+
+# Configuration for the external service
+maersk:
+  api:
+    base-url: https://maersk.com/api/bookings
