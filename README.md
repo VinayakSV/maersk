@@ -41,6 +41,7 @@ With this setup, you can get the entire application (database, backend, and fron
     Run with Docker Compose From the root directory of the project (where the docker-compose.yml file is located), run the following command:
    
 	Start using command: docker-compose up --build
+
 	Stop using command: docker-compose down -v    
 	
     
